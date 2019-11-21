@@ -17,18 +17,22 @@ import org.junit.Test;
 public class CreateBookTest {
 
 	private BooksService booksService;
+
 	@Before
 	public void init() {
 		booksService = BooksWarehouseApplicationContext.booksService();
 	}
 
-	@Test public void createBook() throws BookException{
+	@Test
+	public void createBook() throws BookException {
 		String isbn = booksService.newBook("TEST", new HashMap<String, Object>());
 		Book book = booksService.findBookByIsbn(isbn);
 		Assert.assertTrue(book.getClass() == Book.class);
 
 	}
-	@Test public void createSchoolBook() throws BookException{
+
+	@Test
+	public void createSchoolBook() throws BookException {
 		HashMap<String, Object> options = new HashMap<String, Object>();
 		options.put("subject", "Physics");
 		options.put("year", 10);
@@ -38,7 +42,8 @@ public class CreateBookTest {
 
 	}
 
-	@Test public void createSpecialistBook() throws BookException{
+	@Test
+	public void createSpecialistBook() throws BookException {
 		HashMap<String, Object> options = new HashMap<String, Object>();
 		options.put("topic", "Very Special");
 		String isbn = booksService.newBook("TEST", options);
@@ -46,11 +51,18 @@ public class CreateBookTest {
 		Assert.assertTrue(book.getClass() == SpecialistBook.class);
 
 	}
-	
-	
-	@Test (expected=Exception.class)public void createBookFailsNullOptions() throws BookException{
+
+	@Test(expected = Exception.class)
+	public void createBookFailsNullOptions() throws BookException {
 		booksService.newBook("TEST", null);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void createBookFailsUnsupportedOptions() throws BookException {
+		HashMap<String, Object> options = new HashMap<>();
+		options.put("this", 0);
+		options.put("that", 0);
+		booksService.newBook("TEST", options);
+	}
 
 }
