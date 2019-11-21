@@ -23,7 +23,7 @@ public class BooksServiceScenarioTest {
 
 	@Before
 	public void init() {
-		booksService = new BooksService();
+		booksService = BooksWarehouseApplicationContext.booksService();
 	}
 
 	@Test

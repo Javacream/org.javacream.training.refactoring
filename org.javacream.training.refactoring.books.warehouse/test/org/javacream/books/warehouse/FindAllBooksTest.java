@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class FindAllBooksTest {
 
-	private BooksService booksService;
+	private BooksService booksService = BooksWarehouseApplicationContext.booksService();
 
 	@Before
 	public void init() {

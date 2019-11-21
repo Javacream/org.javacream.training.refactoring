@@ -18,7 +18,7 @@ public class CreateBookTest {
 	private BooksService booksService;
 	@Before
 	public void init() {
-		booksService = new BooksService();
+		booksService = BooksWarehouseApplicationContext.booksService();
 	}
 
 	@Test public void createBook() throws BookException{

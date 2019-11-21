@@ -9,6 +9,19 @@ import org.apache.commons.lang.SerializationUtils;
 
 public class BooksService{
 
+	private RandomIsbnGenerator isbnGenerator;// = BooksWarehouseApplicationContext.randomIsbnGenerator();//NEVER!!!!
+	private SimpleStoreService simpleStoreService;
+	
+	public void setSimpleStoreService(SimpleStoreService simpleStoreService) {
+		this.simpleStoreService = simpleStoreService;
+	}
+
+
+	public void setIsbnGenerator(RandomIsbnGenerator isbnGenerator) {
+		this.isbnGenerator = isbnGenerator;
+	}
+
+
 	public BooksService(){
 		
 	}
@@ -21,7 +34,7 @@ public class BooksService{
 	
 
 	public String newBook(String title, Map<String, Object> options) throws BookException {
-		String isbn = "Isbn" + Math.random();; 
+		String isbn = isbnGenerator.nextIsbn();
 		Book book = new Book();
 		String topic =(String) options.get("topic"); 
 		if(topic != null){
@@ -43,6 +56,7 @@ public class BooksService{
 		books.put(isbn, book);
 		return isbn;
 	}
+	
 
 	public Book findBookByIsbn(String isbn) throws BookException {
 		Book result = (Book) books.get(isbn);
@@ -50,9 +64,7 @@ public class BooksService{
 			throw new BookException(BookException.BookExceptionType.NOT_FOUND,
 					isbn);
 		}
-		int stock = 0;
-		//retrieve stock from external service, e.g. web service call...
-
+		int stock = simpleStoreService.getStock("books", isbn);
 		result.setAvailable(stock > 0);
 		//Don't return internal Book if you don't use a database! 
 		result = (Book) SerializationUtils.clone(result);
@@ -88,5 +100,4 @@ public class BooksService{
 	public Collection<Book> findAllBooks() {
 		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
 	}
-	
 }
