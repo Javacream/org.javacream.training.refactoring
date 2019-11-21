@@ -1,7 +1,8 @@
-package org.javacream.books.warehouse;
+package org.javacream.books.warehouse.api;
 
 import java.util.HashMap;
 
+import org.javacream.books.warehouse.BooksWarehouseApplicationContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

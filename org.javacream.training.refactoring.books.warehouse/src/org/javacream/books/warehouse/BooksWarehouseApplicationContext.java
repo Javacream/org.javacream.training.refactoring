@@ -1,31 +1,42 @@
 package org.javacream.books.warehouse;
 
+import org.javacream.books.isbngenerator.api.IsbnGeneratorService;
+import org.javacream.books.isbngenerator.impl.RandomIsbnGeneratorService;
+import org.javacream.books.warehouse.api.BooksService;
+import org.javacream.books.warehouse.impl.MapBooksService;
+import org.javacream.store.api.StoreService;
+import org.javacream.store.impl.SimpleStoreService;
+
 public abstract class BooksWarehouseApplicationContext {
 
 	private static BooksService booksService;
-	private static RandomIsbnGenerator randomIsbnGenerator;
-	private static SimpleStoreService simpleStoreService;
+	private static IsbnGeneratorService isbnGeneratorService;
+	private static StoreService storeService;
 	
 	
 	static {
-		booksService = new BooksService();
-		randomIsbnGenerator = new RandomIsbnGenerator();
-		simpleStoreService = new SimpleStoreService();
+		MapBooksService mapBooksService = new MapBooksService();
+		RandomIsbnGeneratorService randomIsbnGeneratorService = new RandomIsbnGeneratorService();
+		SimpleStoreService simpleStoreService = new SimpleStoreService();
 
-		randomIsbnGenerator.setPrefix("ISBN:");
+		randomIsbnGeneratorService.setPrefix("ISBN:");
 		simpleStoreService.setStock(42);
-		booksService.setIsbnGenerator(randomIsbnGenerator);
-		booksService.setSimpleStoreService(simpleStoreService);
+		mapBooksService.setIsbnGeneratorService(randomIsbnGeneratorService);
+		mapBooksService.setStoreService(simpleStoreService);
+		
+		booksService =mapBooksService;
+		isbnGeneratorService = randomIsbnGeneratorService;
+		storeService = simpleStoreService;
 	}
 	
 	public static BooksService booksService() {
 		return booksService;
 	}
 
-	public static RandomIsbnGenerator randomIsbnGenerator() {
-		return randomIsbnGenerator;
+	public static IsbnGeneratorService isbnGeneratorService() {
+		return isbnGeneratorService;
 	}
-	public static SimpleStoreService simpleStoreService() {
-		return simpleStoreService;
+	public static StoreService storeService() {
+		return storeService;
 	}
 }

@@ -1,4 +1,4 @@
-package org.javacream.books.warehouse;
+package org.javacream.books.warehouse.api;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.javacream.books.warehouse.BooksWarehouseApplicationContext;
 import org.junit.Before;
 import org.junit.Test;
 
