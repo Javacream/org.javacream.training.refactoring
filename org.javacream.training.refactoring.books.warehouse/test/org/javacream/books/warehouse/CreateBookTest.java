@@ -13,7 +13,7 @@ import org.junit.Test;
  * @mailto training@rainer-sawitzki.de
  * 
  */
-public class CreateBookTests {
+public class CreateBookTest {
 
 	private BooksService booksService;
 	@Before
