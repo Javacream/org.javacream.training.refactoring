@@ -30,12 +30,11 @@ public class TracingDecorator implements InvocationHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T decorate(T toDecorate) {
+	public static <T> T decorate(Class<T> toImplement, Object toDecorate) {
 		TracingDecorator tracingDecorator = new TracingDecorator();
 		tracingDecorator.setDelegate(toDecorate);
 		ClassLoader classLoader = TracingDecorator.class.getClassLoader();
-		Class<?>[] interfaces =  toDecorate.getClass().getInterfaces();
-		return (T) Proxy.newProxyInstance(classLoader, interfaces, tracingDecorator);
+		Class<?>[] interfaces = { toImplement };
+		return toImplement.cast(Proxy.newProxyInstance(classLoader, interfaces, tracingDecorator));
 	}
 }

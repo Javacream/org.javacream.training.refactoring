@@ -5,15 +5,8 @@ import java.util.Map;
 
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
-import org.javacream.books.warehouse.api.BooksService;
 
-public class TracingBooksService implements BooksService{
-
-	private BooksService delegate;
-
-	public void setDelegate(BooksService delegate) {
-		this.delegate = delegate;
-	}
+public class TracingBooksService extends BaseBooksService{
 
 	@Override
 	public Book findBookByIsbn(String isbn) throws BookException {

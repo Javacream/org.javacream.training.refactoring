@@ -7,9 +7,9 @@ import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
 import org.javacream.books.warehouse.api.BooksService;
 
-public class NoOperationBooksService implements BooksService{
+public abstract class BaseBooksService implements BooksService{
 
-	private BooksService delegate;
+	protected BooksService delegate;
 
 	public String newBook(String title, Map<String, Object> options) throws BookException {
 		return delegate.newBook(title, options);

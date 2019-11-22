@@ -34,15 +34,15 @@ public abstract class BooksWarehouseApplicationContext {
 		serializingBooksService.setDelegate(mapBooksService);
 		//tracingBooksService.setDelegate(serializingBooksService);
 
-		IsbnGeneratorService isbnGeneratorService = TracingDecorator.decorate(randomIsbnGeneratorService);
+		IsbnGeneratorService tracingIsbnGeneratorService = TracingDecorator.decorate(IsbnGeneratorService.class, randomIsbnGeneratorService);
 		randomIsbnGeneratorService.setPrefix("ISBN:");
 		simpleStoreService.setStock(42);
-		mapBooksService.setIsbnGeneratorService(isbnGeneratorService);
+		mapBooksService.setIsbnGeneratorService(tracingIsbnGeneratorService);
 		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBookCreators(bookCreators);
 		// mapBooksService.setShouldSerialize(true);
 
-		booksService = TracingDecorator.decorate(serializingBooksService);// mapBooksService;
+		booksService = TracingDecorator.decorate(BooksService.class, serializingBooksService);// mapBooksService;
 		isbnGeneratorService = randomIsbnGeneratorService;
 		storeService = simpleStoreService;
 	}
