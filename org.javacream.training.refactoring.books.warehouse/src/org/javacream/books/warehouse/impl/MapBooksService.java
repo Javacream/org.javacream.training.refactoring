@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.javacream.books.isbngenerator.api.IsbnGeneratorService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookCreator;
@@ -92,7 +92,6 @@ public class MapBooksService implements BooksService {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<Book> findAllBooks() {
 		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
 	}
