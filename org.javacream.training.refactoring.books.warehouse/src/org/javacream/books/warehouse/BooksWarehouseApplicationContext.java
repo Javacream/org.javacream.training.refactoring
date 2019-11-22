@@ -12,7 +12,7 @@ import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.MapBooksService;
-import org.javacream.books.warehouse.impl.TracingSerializingMapBooksService;
+import org.javacream.books.warehouse.impl.decorators.TracingSerializingMapBooksService;
 import org.javacream.store.api.StoreService;
 import org.javacream.store.impl.SimpleStoreService;
 

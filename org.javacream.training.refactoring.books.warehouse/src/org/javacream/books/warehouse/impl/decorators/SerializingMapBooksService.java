@@ -1,4 +1,4 @@
-package org.javacream.books.warehouse.impl;
+package org.javacream.books.warehouse.impl.decorators;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.SerializationUtils;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
+import org.javacream.books.warehouse.impl.MapBooksService;
 
 public class SerializingMapBooksService extends MapBooksService {
 

@@ -1,4 +1,4 @@
-package org.javacream.books.warehouse.impl;
+package org.javacream.books.warehouse.impl.decorators;
 
 import java.util.Collection;
 import java.util.Map;
