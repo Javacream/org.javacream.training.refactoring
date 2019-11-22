@@ -1,6 +1,6 @@
 package org.javacream.store.api;
 
-import org.javacream.books.warehouse.BooksWarehouseApplicationContext;
+import org.javacream.store.impl.SimpleStoreService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ public class SimpleStoreServicegetStockTest {
 
 	@Before
 	public void init() {
-		storeService = BooksWarehouseApplicationContext.storeService();
+		storeService = new SimpleStoreService();
 	}
 
 	@Test
