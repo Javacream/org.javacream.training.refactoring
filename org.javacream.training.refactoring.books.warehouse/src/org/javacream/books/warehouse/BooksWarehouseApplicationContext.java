@@ -12,10 +12,10 @@ import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.decorators.SerializingBooksService;
-import org.javacream.books.warehouse.decorators.TracingBooksService;
 import org.javacream.books.warehouse.impl.MapBooksService;
 import org.javacream.store.api.StoreService;
 import org.javacream.store.impl.SimpleStoreService;
+import org.javacream.util.decorators.TracingDecorator;
 
 public abstract class BooksWarehouseApplicationContext {
 
@@ -30,18 +30,19 @@ public abstract class BooksWarehouseApplicationContext {
 		Map<Set<String>, BookCreator> bookCreators = createBookCreators();
 
 		SerializingBooksService serializingBooksService = new SerializingBooksService();
-		TracingBooksService tracingBooksService = new TracingBooksService();
+		//TracingBooksService tracingBooksService = new TracingBooksService();
 		serializingBooksService.setDelegate(mapBooksService);
-		tracingBooksService.setDelegate(serializingBooksService);
+		//tracingBooksService.setDelegate(serializingBooksService);
 
+		IsbnGeneratorService isbnGeneratorService = TracingDecorator.decorate(randomIsbnGeneratorService);
 		randomIsbnGeneratorService.setPrefix("ISBN:");
 		simpleStoreService.setStock(42);
-		mapBooksService.setIsbnGeneratorService(randomIsbnGeneratorService);
+		mapBooksService.setIsbnGeneratorService(isbnGeneratorService);
 		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBookCreators(bookCreators);
 		// mapBooksService.setShouldSerialize(true);
 
-		booksService = tracingBooksService;// mapBooksService;
+		booksService = TracingDecorator.decorate(serializingBooksService);// mapBooksService;
 		isbnGeneratorService = randomIsbnGeneratorService;
 		storeService = simpleStoreService;
 	}
