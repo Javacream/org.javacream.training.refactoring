@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.javaceream.training.refactoring.notification.NotificationBus;
 import org.javacream.books.isbngenerator.api.IsbnGeneratorService;
 import org.javacream.books.isbngenerator.impl.RandomIsbnGeneratorService;
 import org.javacream.books.warehouse.api.Book;
@@ -11,6 +12,7 @@ import org.javacream.books.warehouse.api.BookCreator;
 import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
+import org.javacream.books.warehouse.decorators.NotifyingBooksService;
 import org.javacream.books.warehouse.decorators.SerializingBooksService;
 import org.javacream.books.warehouse.impl.MapBooksService;
 import org.javacream.store.api.StoreService;
@@ -22,27 +24,34 @@ public abstract class BooksWarehouseApplicationContext {
 	private static BooksService booksService;
 	private static IsbnGeneratorService isbnGeneratorService;
 	private static StoreService storeService;
+	private static NotificationBus notificationBus;
+
+	public static NotificationBus notificationBus() {
+		return notificationBus;
+	}
 
 	static {
 		MapBooksService mapBooksService = new MapBooksService();
 		RandomIsbnGeneratorService randomIsbnGeneratorService = new RandomIsbnGeneratorService();
 		SimpleStoreService simpleStoreService = new SimpleStoreService();
 		Map<Set<String>, BookCreator> bookCreators = createBookCreators();
-
 		SerializingBooksService serializingBooksService = new SerializingBooksService();
-		//TracingBooksService tracingBooksService = new TracingBooksService();
-		serializingBooksService.setDelegate(mapBooksService);
-		//tracingBooksService.setDelegate(serializingBooksService);
-
+		notificationBus = new NotificationBus(); 
+		NotifyingBooksService notifyingBooksService = new NotifyingBooksService();
 		IsbnGeneratorService tracingIsbnGeneratorService = TracingDecorator.decorate(IsbnGeneratorService.class, randomIsbnGeneratorService);
+		BooksService tracingBooksService =TracingDecorator.decorate(BooksService.class, serializingBooksService); 
+		notifyingBooksService.setDelegate(mapBooksService);
+		notifyingBooksService.setNotificationBus(notificationBus);
+		serializingBooksService.setDelegate(notifyingBooksService);
+
 		randomIsbnGeneratorService.setPrefix("ISBN:");
 		simpleStoreService.setStock(42);
+		simpleStoreService.setNotificationBus(notificationBus);
 		mapBooksService.setIsbnGeneratorService(tracingIsbnGeneratorService);
 		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBookCreators(bookCreators);
-		// mapBooksService.setShouldSerialize(true);
 
-		booksService = TracingDecorator.decorate(BooksService.class, serializingBooksService);// mapBooksService;
+		booksService = tracingBooksService; 
 		isbnGeneratorService = randomIsbnGeneratorService;
 		storeService = simpleStoreService;
 	}
