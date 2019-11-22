@@ -12,6 +12,7 @@ import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.MapBooksService;
+import org.javacream.books.warehouse.impl.TracingSerializingMapBooksService;
 import org.javacream.store.api.StoreService;
 import org.javacream.store.impl.SimpleStoreService;
 
@@ -23,7 +24,7 @@ public abstract class BooksWarehouseApplicationContext {
 	
 	
 	static {
-		MapBooksService mapBooksService = new MapBooksService();
+		MapBooksService mapBooksService = new TracingSerializingMapBooksService();
 		RandomIsbnGeneratorService randomIsbnGeneratorService = new RandomIsbnGeneratorService();
 		SimpleStoreService simpleStoreService = new SimpleStoreService();
 		Map<Set<String>, BookCreator> bookCreators = createBookCreators();
@@ -33,6 +34,7 @@ public abstract class BooksWarehouseApplicationContext {
 		mapBooksService.setIsbnGeneratorService(randomIsbnGeneratorService);
 		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBookCreators(bookCreators);
+		//mapBooksService.setShouldSerialize(true);
 		
 		booksService =mapBooksService;
 		isbnGeneratorService = randomIsbnGeneratorService;

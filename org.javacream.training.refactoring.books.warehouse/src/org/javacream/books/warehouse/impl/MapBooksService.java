@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.javacream.books.isbngenerator.api.IsbnGeneratorService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookCreator;
@@ -62,15 +61,11 @@ public class MapBooksService implements BooksService {
 		}
 		int stock = storeService.getStock("books", isbn);
 		result.setAvailable(stock > 0);
-		// Don't return internal Book if you don't use a database!
-		result = (Book) SerializationUtils.clone(result);
 		return result;
 	}
 
 	@Override
 	public Book updateBook(Book bookDetailValue) throws BookException {
-		// Take a copy to prevent external manipulation!
-		bookDetailValue = (Book) SerializationUtils.clone(bookDetailValue);
 
 		if (bookDetailValue.getPrice() <= 0) {
 			throw new BookException(BookException.BookExceptionType.CONSTRAINT, "price <= 0");
@@ -93,6 +88,6 @@ public class MapBooksService implements BooksService {
 
 	@Override
 	public Collection<Book> findAllBooks() {
-		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
+		return (Collection<Book>) new ArrayList<Book>(books.values());
 	}
 }
