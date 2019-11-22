@@ -11,9 +11,9 @@ import org.javacream.books.warehouse.api.BookCreator;
 import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
-import org.javacream.books.warehouse.decorators.NoOperationBooksService;
+import org.javacream.books.warehouse.decorators.SerializingBooksService;
+import org.javacream.books.warehouse.decorators.TracingBooksService;
 import org.javacream.books.warehouse.impl.MapBooksService;
-import org.javacream.books.warehouse.impl.decorators.TracingSerializingMapBooksService;
 import org.javacream.store.api.StoreService;
 import org.javacream.store.impl.SimpleStoreService;
 
@@ -22,30 +22,30 @@ public abstract class BooksWarehouseApplicationContext {
 	private static BooksService booksService;
 	private static IsbnGeneratorService isbnGeneratorService;
 	private static StoreService storeService;
-	
-	
+
 	static {
-		MapBooksService mapBooksService = new TracingSerializingMapBooksService();
+		MapBooksService mapBooksService = new MapBooksService();
 		RandomIsbnGeneratorService randomIsbnGeneratorService = new RandomIsbnGeneratorService();
 		SimpleStoreService simpleStoreService = new SimpleStoreService();
 		Map<Set<String>, BookCreator> bookCreators = createBookCreators();
-		
-		NoOperationBooksService noOperationBooksService = new NoOperationBooksService();
-		noOperationBooksService.setDelegate(mapBooksService);
-		
-		
+
+		SerializingBooksService serializingBooksService = new SerializingBooksService();
+		TracingBooksService tracingBooksService = new TracingBooksService();
+		serializingBooksService.setDelegate(mapBooksService);
+		tracingBooksService.setDelegate(serializingBooksService);
+
 		randomIsbnGeneratorService.setPrefix("ISBN:");
 		simpleStoreService.setStock(42);
 		mapBooksService.setIsbnGeneratorService(randomIsbnGeneratorService);
 		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBookCreators(bookCreators);
-		//mapBooksService.setShouldSerialize(true);
-		
-		booksService =noOperationBooksService;//mapBooksService;
+		// mapBooksService.setShouldSerialize(true);
+
+		booksService = tracingBooksService;// mapBooksService;
 		isbnGeneratorService = randomIsbnGeneratorService;
 		storeService = simpleStoreService;
 	}
-	
+
 	public static BooksService booksService() {
 		return booksService;
 	}
@@ -79,13 +79,13 @@ public abstract class BooksWarehouseApplicationContext {
 			return book;
 		});
 
-		
 		return creators;
 	}
 
 	public static IsbnGeneratorService isbnGeneratorService() {
 		return isbnGeneratorService;
 	}
+
 	public static StoreService storeService() {
 		return storeService;
 	}
