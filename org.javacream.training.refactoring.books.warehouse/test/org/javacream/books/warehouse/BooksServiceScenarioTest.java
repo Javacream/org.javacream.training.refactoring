@@ -1,4 +1,4 @@
-package org.javacream.training.refactoring.books.warehouse;
+package org.javacream.books.warehouse;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,9 +7,6 @@ import static org.junit.Assert.fail;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.javacream.books.warehouse.Book;
-import org.javacream.books.warehouse.BookException;
-import org.javacream.books.warehouse.BooksService;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,10 +1,7 @@
-package org.javacream.training.refactoring.books.warehouse;
+package org.javacream.books.warehouse;
 
 import java.util.HashMap;
 
-import org.javacream.books.warehouse.Book;
-import org.javacream.books.warehouse.BookException;
-import org.javacream.books.warehouse.BooksService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

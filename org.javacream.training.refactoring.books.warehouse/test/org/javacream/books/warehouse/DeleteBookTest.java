@@ -1,10 +1,7 @@
-package org.javacream.training.refactoring.books.warehouse;
+package org.javacream.books.warehouse;
 
 import java.util.HashMap;
 
-import org.javacream.books.warehouse.Book;
-import org.javacream.books.warehouse.BookException;
-import org.javacream.books.warehouse.BooksService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +13,7 @@ import org.junit.Test;
  * @mailto training@rainer-sawitzki.de
  * 
  */
-public class FindBookByIsbnTest {
+public class DeleteBookTest {
 
 	private BooksService booksService;
 	private String ISBN;
@@ -33,14 +30,16 @@ public class FindBookByIsbnTest {
 	}
 
 	@Test
-	public void findBookByIsbnOk() throws BookException {
+	public void deleteBookByIsbnOk() throws BookException {
 		Book book = booksService.findBookByIsbn(ISBN);
-		Assert.assertNotNull(book);
+		booksService.deleteBookByIsbn(ISBN);
+		Assert.assertFalse(booksService.findAllBooks().contains(book));
 	}
 
 	@Test(expected = BookException.class)
-	public void findBookByIsbnWrong() throws BookException {
-		booksService.findBookByIsbn(WRONG_ISBN);
+	public void deleteBookByIsbnWrong() throws BookException {
+		booksService.deleteBookByIsbn(WRONG_ISBN);
 	}
+
 
 }
