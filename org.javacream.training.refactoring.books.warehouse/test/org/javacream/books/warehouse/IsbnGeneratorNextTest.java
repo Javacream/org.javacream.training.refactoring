@@ -10,7 +10,7 @@ public class IsbnGeneratorNextTest {
 
 	@Before
 	public void initTest() {
-		isbnGenerator = new RandomIsbnGenerator();
+		isbnGenerator = BooksApplicationContext.getIsbnGenerator();
 	}
 
 	@Test

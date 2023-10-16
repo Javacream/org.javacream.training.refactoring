@@ -20,7 +20,7 @@ public class UpdateBooksTest {
 	private static final String WRONG_ISBN = "##ISBN##";
 	@Before
 	public void init() {
-		booksService = new BooksService();
+		booksService = BooksApplicationContext.getBooksService();
 		try {
 			ISBN = booksService.newBook("TEST", new HashMap<String, Object>());
 		} catch (BookException e) {

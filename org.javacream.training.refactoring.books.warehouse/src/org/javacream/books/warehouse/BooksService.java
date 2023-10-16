@@ -17,8 +17,6 @@ public class BooksService{
 	
 	{
 		books = new HashMap<String, Book>();
-		randomIsbnGenerator = new RandomIsbnGenerator();
-		storeService = new SimpleStoreService();
 	}
 
 	
@@ -89,6 +87,14 @@ public class BooksService{
 	@SuppressWarnings("unchecked")
 	public Collection<Book> findAllBooks() {
 		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
+	}
+
+	public void setRandomIsbnGenerator(RandomIsbnGenerator randomIsbnGenerator) {
+		this.randomIsbnGenerator = randomIsbnGenerator;
+	}
+
+	public void setStoreService(SimpleStoreService storeService) {
+		this.storeService = storeService;
 	}
 	
 }

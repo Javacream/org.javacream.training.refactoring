@@ -17,8 +17,7 @@ public class FindAllBooksTest {
 
 	@Before
 	public void init() {
-		booksService = new BooksService();
-
+		booksService = BooksApplicationContext.getBooksService();
 	}
 
 	@Test

@@ -8,7 +8,7 @@ public class StoreServicegetStockTest {
 
 	@Before
 	public void init() {
-		storeService = new SimpleStoreService();
+		storeService = BooksApplicationContext.getStoreService();
 	}
 
 	@Test
