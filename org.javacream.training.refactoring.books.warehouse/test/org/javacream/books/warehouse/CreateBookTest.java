@@ -6,6 +6,7 @@ import org.javacream.books.BooksApplicationContext;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
 import org.javacream.books.warehouse.api.BooksService;
+import org.javacream.books.warehouse.api.PoetryBook;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.junit.Assert;
@@ -58,6 +59,15 @@ public class CreateBookTest {
 
 	}
 
+	@Test
+	public void createPoetryBook() throws BookException {
+		HashMap<String, Object> options = new HashMap<String, Object>();
+		options.put("epoch", "romantic");
+		String isbn = booksService.newBook("TEST", options);
+		Book book = booksService.findBookByIsbn(isbn);
+		Assert.assertTrue(book.getClass() == PoetryBook.class);
+
+	}
 	@Test(expected = Exception.class)
 	public void createBookFailsNullOptions() throws BookException {
 		booksService.newBook("TEST", null);

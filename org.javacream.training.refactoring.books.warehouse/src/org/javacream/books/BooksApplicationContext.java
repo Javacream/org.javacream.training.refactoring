@@ -11,6 +11,7 @@ import org.javacream.books.store.api.StoreService;
 import org.javacream.books.store.impl.SimpleStoreService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BooksService;
+import org.javacream.books.warehouse.api.PoetryBook;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.BookCreator;
@@ -59,6 +60,15 @@ public abstract class BooksApplicationContext {
 			book.setTopic(options.get("topic").toString());
 			return book;
 		};
+		Set<String> poetryBooksOptions = new HashSet<>();
+		poetryBooksOptions.add("epoch");
+		BookCreator poetryBookCreator = (isbn, title, options) -> {
+			PoetryBook book = new PoetryBook();
+			book.setIsbn(isbn);
+			book.setTitle(title);
+			book.setEpoch(options.get("epoch").toString());
+			return book;
+		};
 		Set<String> schoolBooksOptions = new HashSet<>();
 		schoolBooksOptions.add("year");
 		schoolBooksOptions.add("subject");
@@ -74,6 +84,7 @@ public abstract class BooksApplicationContext {
 		creators.put(booksOptions, bookCreator);
 		creators.put(specialistBooksOptions, specialistBookCreator);
 		creators.put(schoolBooksOptions, schoolBookCreator);
+		creators.put(poetryBooksOptions, poetryBookCreator);
 		
 		Book book = new Book();
 		book.setIsbn(ISBN);
