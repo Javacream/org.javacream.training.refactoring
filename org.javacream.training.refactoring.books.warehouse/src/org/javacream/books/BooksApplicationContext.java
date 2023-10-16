@@ -1,4 +1,4 @@
-package org.javacream.books.warehouse.api;
+package org.javacream.books;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +7,8 @@ import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.isbngenerator.impl.RandomIsbnGenerator;
 import org.javacream.books.store.api.StoreService;
 import org.javacream.books.store.impl.SimpleStoreService;
+import org.javacream.books.warehouse.api.Book;
+import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.impl.MapBooksService;
 
 public abstract class BooksApplicationContext {

@@ -1,7 +1,7 @@
 package org.javacream.books.store;
 
+import org.javacream.books.BooksApplicationContext;
 import org.javacream.books.store.api.StoreService;
-import org.javacream.books.warehouse.api.BooksApplicationContext;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.javacream.books.BooksApplicationContext;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
-import org.javacream.books.warehouse.api.BooksApplicationContext;
 import org.javacream.books.warehouse.api.BooksService;
 import org.junit.Before;
 import org.junit.Test;

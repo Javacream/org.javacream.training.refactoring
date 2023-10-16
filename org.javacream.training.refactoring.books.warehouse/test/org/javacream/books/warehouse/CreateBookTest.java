@@ -2,9 +2,9 @@ package org.javacream.books.warehouse;
 
 import java.util.HashMap;
 
+import org.javacream.books.BooksApplicationContext;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
-import org.javacream.books.warehouse.api.BooksApplicationContext;
 import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
