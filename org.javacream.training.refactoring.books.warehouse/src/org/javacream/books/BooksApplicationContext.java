@@ -1,7 +1,9 @@
 package org.javacream.books;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.isbngenerator.impl.RandomIsbnGenerator;
@@ -9,6 +11,9 @@ import org.javacream.books.store.api.StoreService;
 import org.javacream.books.store.impl.SimpleStoreService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BooksService;
+import org.javacream.books.warehouse.api.SchoolBook;
+import org.javacream.books.warehouse.api.SpecialistBook;
+import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
 
 public abstract class BooksApplicationContext {
@@ -37,6 +42,39 @@ public abstract class BooksApplicationContext {
 		storeService = new SimpleStoreService();
 		booksService = new MapBooksService();
 		Map<String, Book> books = new HashMap<>();
+		Map<Set<String>, BookCreator> creators = new HashMap<>();
+		Set<String> booksOptions = new HashSet<>();
+		BookCreator bookCreator = (isbn, title, options) -> {
+			Book book = new Book();
+			book.setIsbn(isbn);
+			book.setTitle(title);
+			return book;
+		};
+		Set<String> specialistBooksOptions = new HashSet<>();
+		specialistBooksOptions.add("topic");
+		BookCreator specialistBookCreator = (isbn, title, options) -> {
+			SpecialistBook book = new SpecialistBook();
+			book.setIsbn(isbn);
+			book.setTitle(title);
+			book.setTopic(options.get("topic").toString());
+			return book;
+		};
+		Set<String> schoolBooksOptions = new HashSet<>();
+		schoolBooksOptions.add("year");
+		schoolBooksOptions.add("subject");
+		BookCreator schoolBookCreator = (isbn, title, options) -> {
+			SchoolBook book = new SchoolBook();
+			book.setIsbn(isbn);
+			book.setTitle(title);
+			book.setSubject(options.get("subject").toString());
+			book.setYear(Integer.parseInt(options.get("year").toString()));
+			return book;
+		};
+
+		creators.put(booksOptions, bookCreator);
+		creators.put(specialistBooksOptions, specialistBookCreator);
+		creators.put(schoolBooksOptions, schoolBookCreator);
+		
 		Book book = new Book();
 		book.setIsbn(ISBN);
 		book.setTitle(TITLE);
@@ -45,6 +83,7 @@ public abstract class BooksApplicationContext {
 		booksService.setRandomIsbnGenerator(isbnGenerator);
 		booksService.setStoreService(storeService);
 		booksService.setBooks(books);
+		booksService.setBooksCreators(creators);
 		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX );
 	}
 	

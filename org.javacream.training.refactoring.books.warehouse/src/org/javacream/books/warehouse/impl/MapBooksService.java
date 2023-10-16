@@ -3,6 +3,7 @@ package org.javacream.books.warehouse.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
@@ -10,8 +11,6 @@ import org.javacream.books.store.api.StoreService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BookException;
 import org.javacream.books.warehouse.api.BooksService;
-import org.javacream.books.warehouse.api.SchoolBook;
-import org.javacream.books.warehouse.api.SpecialistBook;
 
 public class MapBooksService implements BooksService{
 
@@ -20,7 +19,11 @@ public class MapBooksService implements BooksService{
 	}
 	private Map<String, Book> books;
 	private StoreService storeService;
-	
+	private Map<Set<String>, BookCreator> booksCreators;
+	public void setBooksCreators(Map<Set<String>, BookCreator> booksCreators) {
+		this.booksCreators = booksCreators;
+	}
+
 	public void setBooks(Map<String, Book> books) {
 		this.books = books;
 	}
@@ -28,24 +31,7 @@ public class MapBooksService implements BooksService{
 	@Override
 	public String newBook(String title, Map<String, Object> options) throws BookException {
 		String isbn = isbnGenerator.next(); 
-		Book book = new Book();
-		String topic =(String) options.get("topic"); 
-		if(topic != null){
-			SpecialistBook specialistBook = new SpecialistBook();
-			specialistBook.setTopic(topic);
-			book = specialistBook;
-		}
-		String subject =(String) options.get("subject"); 
-		Integer year =(Integer) options.get("year"); 
-		if(subject != null && year != null){
-			SchoolBook schoolBook = new SchoolBook();
-			schoolBook.setYear(year);
-			schoolBook.setTitle(subject);
-			book = schoolBook;
-		}
-		
-		book.setIsbn(isbn);
-		book.setTitle(title);
+		Book book = booksCreators.get(options.keySet()).create(isbn,  title, options);
 		books.put(isbn, book);
 		return isbn;
 	}
