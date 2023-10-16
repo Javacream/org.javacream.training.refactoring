@@ -2,14 +2,14 @@ package org.javacream.books.warehouse;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.javacream.books.isbngennerator.api.IsbnGenerator;
 
 public class BooksService{
 
-	private RandomIsbnGenerator randomIsbnGenerator;
+	private IsbnGenerator isbnGenerator;
 	public BooksService(){
 	}
 	private Map<String, Book> books;
@@ -20,7 +20,7 @@ public class BooksService{
 	}
 
 	public String newBook(String title, Map<String, Object> options) throws BookException {
-		String isbn = randomIsbnGenerator.next(); 
+		String isbn = isbnGenerator.next(); 
 		Book book = new Book();
 		String topic =(String) options.get("topic"); 
 		if(topic != null){
@@ -87,8 +87,8 @@ public class BooksService{
 		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
 	}
 
-	public void setRandomIsbnGenerator(RandomIsbnGenerator randomIsbnGenerator) {
-		this.randomIsbnGenerator = randomIsbnGenerator;
+	public void setRandomIsbnGenerator(IsbnGenerator randomIsbnGenerator) {
+		this.isbnGenerator = randomIsbnGenerator;
 	}
 
 	public void setStoreService(SimpleStoreService storeService) {

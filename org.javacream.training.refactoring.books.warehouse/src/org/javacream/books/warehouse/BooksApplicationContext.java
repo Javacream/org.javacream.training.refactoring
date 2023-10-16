@@ -3,6 +3,9 @@ package org.javacream.books.warehouse;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.javacream.books.isbngenerator.impl.RandomIsbnGenerator;
+import org.javacream.books.isbngennerator.api.IsbnGenerator;
+
 public abstract class BooksApplicationContext {
 	public static final String ISBN = "ISBN-Test";
 	public static final String TITLE = "Test-Title";
@@ -12,7 +15,7 @@ public abstract class BooksApplicationContext {
 		return booksService;
 	}
 
-	public static RandomIsbnGenerator getIsbnGenerator() {
+	public static IsbnGenerator getIsbnGenerator() {
 		return isbnGenerator;
 	}
 

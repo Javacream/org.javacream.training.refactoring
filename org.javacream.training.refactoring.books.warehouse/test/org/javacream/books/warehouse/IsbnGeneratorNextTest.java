@@ -1,12 +1,13 @@
 package org.javacream.books.warehouse;
 
+import org.javacream.books.isbngennerator.api.IsbnGenerator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class IsbnGeneratorNextTest {
 
-	private RandomIsbnGenerator isbnGenerator;
+	private IsbnGenerator isbnGenerator;
 
 	@Before
 	public void initTest() {
