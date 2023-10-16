@@ -1,6 +1,6 @@
 package org.javacream.books.isbngenerator.impl;
 
-import org.javacream.books.isbngennerator.api.IsbnGenerator;
+import org.javacream.books.isbngenerator.api.IsbnGenerator;
 
 public class RandomIsbnGenerator implements IsbnGenerator{
 	private String prefix;

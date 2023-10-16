@@ -1,5 +1,9 @@
 package org.javacream.books.warehouse;
 
+import org.javacream.books.warehouse.api.Book;
+import org.javacream.books.warehouse.api.BookException;
+import org.javacream.books.warehouse.api.BooksApplicationContext;
+import org.javacream.books.warehouse.api.BooksService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

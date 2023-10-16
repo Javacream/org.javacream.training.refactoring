@@ -1,10 +1,12 @@
-package org.javacream.books.warehouse;
+package org.javacream.books.store;
 
+import org.javacream.books.store.api.StoreService;
+import org.javacream.books.warehouse.api.BooksApplicationContext;
 import org.junit.Before;
 import org.junit.Test;
 
 public class StoreServicegetStockTest {
-	private SimpleStoreService storeService;
+	private StoreService storeService;
 
 	@Before
 	public void init() {
