@@ -23,6 +23,7 @@ public class BooksServiceScenarioTest {
 
 	@Before
 	public void init() {
+		BooksApplicationContext.init();
 		booksService = BooksApplicationContext.getBooksService();
 	}
 

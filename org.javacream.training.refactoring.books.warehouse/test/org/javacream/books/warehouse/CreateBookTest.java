@@ -19,6 +19,7 @@ public class CreateBookTest {
 
 	@Before
 	public void init() {
+		BooksApplicationContext.init();
 		booksService = BooksApplicationContext.getBooksService();
 	}
 

@@ -1,7 +1,5 @@
 package org.javacream.books.warehouse;
 
-import java.util.HashMap;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +18,9 @@ public class UpdateBooksTest {
 	private static final String WRONG_ISBN = "##ISBN##";
 	@Before
 	public void init() {
+		BooksApplicationContext.init();
 		booksService = BooksApplicationContext.getBooksService();
-		try {
-			ISBN = booksService.newBook("TEST", new HashMap<String, Object>());
-		} catch (BookException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-
+		ISBN = BooksApplicationContext.ISBN;
 	}
 
 

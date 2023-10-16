@@ -10,6 +10,7 @@ public class IsbnGeneratorNextTest {
 
 	@Before
 	public void initTest() {
+		BooksApplicationContext.init();
 		isbnGenerator = BooksApplicationContext.getIsbnGenerator();
 	}
 
@@ -22,7 +23,7 @@ public class IsbnGeneratorNextTest {
 	@Test
 	public void createdIsbnStartsWithISBN() {
 		String isbn = isbnGenerator.next();
-		Assert.assertTrue(isbn.startsWith("ISBN-"));
+		Assert.assertTrue(isbn.startsWith(BooksApplicationContext.ISBN_GENERATOR_PREFIX));
 
 	}
 

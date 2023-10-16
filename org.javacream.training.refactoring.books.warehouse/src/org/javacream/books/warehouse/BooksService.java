@@ -15,11 +15,9 @@ public class BooksService{
 	private Map<String, Book> books;
 	private SimpleStoreService storeService;
 	
-	{
-		books = new HashMap<String, Book>();
+	public void setBooks(Map<String, Book> books) {
+		this.books = books;
 	}
-
-	
 
 	public String newBook(String title, Map<String, Object> options) throws BookException {
 		String isbn = randomIsbnGenerator.next(); 

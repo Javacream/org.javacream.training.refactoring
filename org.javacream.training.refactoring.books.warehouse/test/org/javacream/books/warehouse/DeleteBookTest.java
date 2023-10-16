@@ -20,13 +20,9 @@ public class DeleteBookTest {
 	private static final String WRONG_ISBN = "##ISBN##";
 	@Before
 	public void init() {
+		BooksApplicationContext.init();
 		booksService = BooksApplicationContext.getBooksService();
-		try {
-			ISBN = booksService.newBook("TEST", new HashMap<String, Object>());
-		} catch (BookException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-
+		ISBN = BooksApplicationContext.ISBN;
 	}
 
 	@Test
