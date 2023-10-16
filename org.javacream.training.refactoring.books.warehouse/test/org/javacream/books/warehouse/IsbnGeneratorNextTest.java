@@ -19,6 +19,12 @@ public class IsbnGeneratorNextTest {
 		Assert.assertNotNull(isbn);
 
 	}
+	@Test
+	public void createdIsbnStartsWithISBN() {
+		String isbn = isbnGenerator.next();
+		Assert.assertTrue(isbn.startsWith("ISBN-"));
+
+	}
 
 	@Test
 	public void creates_unique_isbns() {
