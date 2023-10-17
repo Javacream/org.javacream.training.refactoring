@@ -5,27 +5,27 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-public final class Aspect implements InvocationHandler {
+public final class Aspect<T> implements InvocationHandler {
 	private Object delegate;
-	public void setBefore(Before before) {
+	public void setBefore(Before<T> before) {
 		this.before = before;
 	}
-	public void setReturning(Returning returning) {
+	public void setReturning(Returning<T> returning) {
 		this.returning = returning;
 	}
-	public void setThrowing(Throwing throwing) {
+	public void setThrowing(Throwing<T> throwing) {
 		this.throwing = throwing;
 	}
-	private Before before;
-	private Returning returning;
-	private Throwing throwing;
+	private Before<T> before;
+	private Returning<T> returning;
+	private Throwing<T> throwing;
 	public void setDelegate(Object delegate) {
 		this.delegate = delegate;
 	}
 	@Override
 	public final Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		String methodName = method.getName();
-		Object param = before.call(methodName, args);
+		T param = before.call(methodName, args);
 		try {
 			Object result = method.invoke(delegate, args);
 			returning.accept(methodName, result, param);
@@ -40,15 +40,15 @@ public final class Aspect implements InvocationHandler {
 		}
 	}
 	@SuppressWarnings("unchecked")
-	public static <T> T aspect(T obj, Before<Object> before, Returning<Object> returning, Throwing<Object> throwing){
-		Aspect aspect = new Aspect();
+	public static <T, U> U aspect(U obj, Before<T> before, Returning<T> returning, Throwing<T> throwing){
+		Aspect<T> aspect = new Aspect<T>();
 		aspect.setDelegate(obj);
 		aspect.setBefore(before);
 		aspect.setReturning(returning);
 		aspect.setThrowing(throwing);
 		ClassLoader classLoader = Aspect.class.getClassLoader();
 		Class<?>[] interfaces = obj.getClass().getInterfaces();
-		return (T)Proxy.newProxyInstance(classLoader, interfaces, aspect);
+		return (U)Proxy.newProxyInstance(classLoader, interfaces, aspect);
 	}
 
 	public interface Before<T>{

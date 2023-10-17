@@ -1,11 +1,11 @@
 package org.javacream.util.aspects;
 
 public class Performance{
-	public Object before(String methodName, Object[] args){
+	public Long before(String methodName, Object[] args){
 		return System.currentTimeMillis();
 	}
 	
-	public void returning(String methodName, Object result, Object param) {
+	public void returning(String methodName, Object result, Long param) {
 		measure(methodName, (long)param);
 	}
 	private void measure(String methodName, long param) {
@@ -13,7 +13,7 @@ public class Performance{
 		
 	}
 
-	public void throwing(String methodName, Throwable t, Object param) {
+	public void throwing(String methodName, Throwable t, Long param) {
 		measure(methodName, (long)param);
 	}
 }
