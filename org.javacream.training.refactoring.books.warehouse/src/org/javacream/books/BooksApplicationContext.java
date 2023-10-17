@@ -1,5 +1,6 @@
 package org.javacream.books;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
 import org.javacream.books.warehouse.impl.decorators.DeepCopyBooksService;
+import org.javacream.util.aspects.Aspect;
 import org.javacream.util.aspects.PerformanceAspect;
 import org.javacream.util.aspects.TracingAspect;
 
@@ -100,7 +102,18 @@ public abstract class BooksApplicationContext {
 		mapBooksService.setBooks(books);
 		mapBooksService.setBooksCreators(creators);
 		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX);
-		storeService = TracingAspect.aspect(simpleStoreService);
+		storeService = Aspect.aspect(simpleStoreService, 
+				(methodName, args) -> {
+					String arguments = args != null ? Arrays.asList(args).toString(): "none";
+					System.out.println("entering " + methodName +", params=" + arguments);
+				}, 
+				(methodName, result) -> {
+					System.out.println("returning from " + methodName +", result=" + result);
+				}, 
+				(methodName, t) -> {
+					System.out.println("throwing from " + methodName +", throwable=" + t);
+				}
+				);
 		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
 		BooksService auditBooksService = TracingAspect.aspect(mapBooksService);
 		deepCopyBooksService.setDelegate(auditBooksService);
