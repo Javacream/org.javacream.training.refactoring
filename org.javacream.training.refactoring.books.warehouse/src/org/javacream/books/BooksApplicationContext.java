@@ -8,6 +8,7 @@ import java.util.Set;
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.isbngenerator.impl.RandomIsbnGenerator;
 import org.javacream.books.store.api.StoreService;
+import org.javacream.books.store.impl.AuditStoreService;
 import org.javacream.books.store.impl.SimpleStoreService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BooksService;
@@ -42,7 +43,7 @@ public abstract class BooksApplicationContext {
 	
 	public static void init(){
 		isbnGenerator = new RandomIsbnGenerator();
-		storeService = new SimpleStoreService();
+		SimpleStoreService simpleStoreService = new SimpleStoreService();
 		MapBooksService mapBooksService = new MapBooksService();
 		Map<String, Book> books = new HashMap<>();
 		Map<Set<String>, BookCreator> creators = new HashMap<>();
@@ -94,16 +95,18 @@ public abstract class BooksApplicationContext {
 		book.setPrice(PRICE);
 		books.put(book.getIsbn(), book);
 		mapBooksService.setRandomIsbnGenerator(isbnGenerator);
-		mapBooksService.setStoreService(storeService);
+		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBooks(books);
 		mapBooksService.setBooksCreators(creators);
 		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX );
-
+		AuditStoreService auditStoreService = new AuditStoreService();
+		auditStoreService.setDelegate(simpleStoreService);
+		storeService = auditStoreService;
 		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
-		deepCopyBooksService.setDelegate(mapBooksService);
 		AuditBooksService auditBooksService = new AuditBooksService();
-		auditBooksService.setDelegate(deepCopyBooksService);
-		booksService = auditBooksService;
+		auditBooksService.setDelegate(mapBooksService);
+		deepCopyBooksService.setDelegate(auditBooksService);
+		booksService = deepCopyBooksService;
 	}
 	
 }
