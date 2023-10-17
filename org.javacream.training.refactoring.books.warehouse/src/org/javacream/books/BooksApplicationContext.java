@@ -14,15 +14,15 @@ import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.PoetryBook;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
-import org.javacream.books.warehouse.impl.AuditingDeepCopyMapBooksService;
 import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
+import org.javacream.books.warehouse.impl.decorators.DeepCopyBooksService;
 
 public abstract class BooksApplicationContext {
 	public static final String ISBN = "ISBN-Test";
 	public static final String TITLE = "Test-Title";
 	public static final Double PRICE = 19.99;
-	private static MapBooksService booksService;
+	private static BooksService booksService;
 	public static BooksService getBooksService() {
 		return booksService;
 	}
@@ -42,7 +42,7 @@ public abstract class BooksApplicationContext {
 	public static void init(){
 		isbnGenerator = new RandomIsbnGenerator();
 		storeService = new SimpleStoreService();
-		booksService = new AuditingDeepCopyMapBooksService();
+		MapBooksService mapBooksService = new MapBooksService();
 		Map<String, Book> books = new HashMap<>();
 		Map<Set<String>, BookCreator> creators = new HashMap<>();
 		Set<String> booksOptions = new HashSet<>();
@@ -92,11 +92,15 @@ public abstract class BooksApplicationContext {
 		book.setTitle(TITLE);
 		book.setPrice(PRICE);
 		books.put(book.getIsbn(), book);
-		booksService.setRandomIsbnGenerator(isbnGenerator);
-		booksService.setStoreService(storeService);
-		booksService.setBooks(books);
-		booksService.setBooksCreators(creators);
+		mapBooksService.setRandomIsbnGenerator(isbnGenerator);
+		mapBooksService.setStoreService(storeService);
+		mapBooksService.setBooks(books);
+		mapBooksService.setBooksCreators(creators);
 		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX );
+
+		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
+		deepCopyBooksService.setDelegate(mapBooksService);
+		booksService = deepCopyBooksService;
 	}
 	
 }
