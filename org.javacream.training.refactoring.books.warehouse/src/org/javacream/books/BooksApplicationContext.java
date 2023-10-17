@@ -8,7 +8,6 @@ import java.util.Set;
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.isbngenerator.impl.RandomIsbnGenerator;
 import org.javacream.books.store.api.StoreService;
-import org.javacream.books.store.impl.AuditStoreService;
 import org.javacream.books.store.impl.SimpleStoreService;
 import org.javacream.books.warehouse.api.Book;
 import org.javacream.books.warehouse.api.BooksService;
@@ -17,14 +16,15 @@ import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
-import org.javacream.books.warehouse.impl.decorators.AuditBooksService;
 import org.javacream.books.warehouse.impl.decorators.DeepCopyBooksService;
+import org.javacream.util.aspects.AuditAspect;
 
 public abstract class BooksApplicationContext {
 	public static final String ISBN = "ISBN-Test";
 	public static final String TITLE = "Test-Title";
 	public static final Double PRICE = 19.99;
 	private static BooksService booksService;
+
 	public static BooksService getBooksService() {
 		return booksService;
 	}
@@ -40,8 +40,8 @@ public abstract class BooksApplicationContext {
 	private static RandomIsbnGenerator isbnGenerator;
 	private static StoreService storeService;
 	public static String ISBN_GENERATOR_PREFIX = "ISBN-";
-	
-	public static void init(){
+
+	public static void init() {
 		isbnGenerator = new RandomIsbnGenerator();
 		SimpleStoreService simpleStoreService = new SimpleStoreService();
 		MapBooksService mapBooksService = new MapBooksService();
@@ -88,7 +88,7 @@ public abstract class BooksApplicationContext {
 		creators.put(specialistBooksOptions, specialistBookCreator);
 		creators.put(schoolBooksOptions, schoolBookCreator);
 		creators.put(poetryBooksOptions, poetryBookCreator);
-		
+
 		Book book = new Book();
 		book.setIsbn(ISBN);
 		book.setTitle(TITLE);
@@ -98,15 +98,12 @@ public abstract class BooksApplicationContext {
 		mapBooksService.setStoreService(simpleStoreService);
 		mapBooksService.setBooks(books);
 		mapBooksService.setBooksCreators(creators);
-		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX );
-		AuditStoreService auditStoreService = new AuditStoreService();
-		auditStoreService.setDelegate(simpleStoreService);
-		storeService = auditStoreService;
+		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX);
+		storeService = AuditAspect.aspect(simpleStoreService);
 		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
-		AuditBooksService auditBooksService = new AuditBooksService();
-		auditBooksService.setDelegate(mapBooksService);
+		BooksService auditBooksService = AuditAspect.aspect(mapBooksService);
 		deepCopyBooksService.setDelegate(auditBooksService);
 		booksService = deepCopyBooksService;
 	}
-	
+
 }
