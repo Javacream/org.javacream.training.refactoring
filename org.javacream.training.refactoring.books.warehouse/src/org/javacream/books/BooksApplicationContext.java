@@ -14,9 +14,9 @@ import org.javacream.books.warehouse.api.BooksService;
 import org.javacream.books.warehouse.api.PoetryBook;
 import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
+import org.javacream.books.warehouse.impl.AuditingDeepCopyMapBooksService;
 import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
-import org.javacream.books.warehouse.impl.DeepCopyMapBooksService;
 
 public abstract class BooksApplicationContext {
 	public static final String ISBN = "ISBN-Test";
@@ -42,7 +42,7 @@ public abstract class BooksApplicationContext {
 	public static void init(){
 		isbnGenerator = new RandomIsbnGenerator();
 		storeService = new SimpleStoreService();
-		booksService = new DeepCopyMapBooksService();
+		booksService = new AuditingDeepCopyMapBooksService();
 		Map<String, Book> books = new HashMap<>();
 		Map<Set<String>, BookCreator> creators = new HashMap<>();
 		Set<String> booksOptions = new HashSet<>();
