@@ -16,6 +16,7 @@ import org.javacream.books.warehouse.api.SchoolBook;
 import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
+import org.javacream.books.warehouse.impl.decorators.AuditBooksService;
 import org.javacream.books.warehouse.impl.decorators.DeepCopyBooksService;
 
 public abstract class BooksApplicationContext {
@@ -100,7 +101,9 @@ public abstract class BooksApplicationContext {
 
 		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
 		deepCopyBooksService.setDelegate(mapBooksService);
-		booksService = deepCopyBooksService;
+		AuditBooksService auditBooksService = new AuditBooksService();
+		auditBooksService.setDelegate(deepCopyBooksService);
+		booksService = auditBooksService;
 	}
 	
 }
