@@ -17,7 +17,8 @@ import org.javacream.books.warehouse.api.SpecialistBook;
 import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
 import org.javacream.books.warehouse.impl.decorators.DeepCopyBooksService;
-import org.javacream.util.aspects.AuditAspect;
+import org.javacream.util.aspects.PerformanceAspect;
+import org.javacream.util.aspects.TracingAspect;
 
 public abstract class BooksApplicationContext {
 	public static final String ISBN = "ISBN-Test";
@@ -99,11 +100,11 @@ public abstract class BooksApplicationContext {
 		mapBooksService.setBooks(books);
 		mapBooksService.setBooksCreators(creators);
 		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX);
-		storeService = AuditAspect.aspect(simpleStoreService);
+		storeService = TracingAspect.aspect(simpleStoreService);
 		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
-		BooksService auditBooksService = AuditAspect.aspect(mapBooksService);
+		BooksService auditBooksService = TracingAspect.aspect(mapBooksService);
 		deepCopyBooksService.setDelegate(auditBooksService);
-		booksService = deepCopyBooksService;
+		booksService = PerformanceAspect.aspect(deepCopyBooksService);
 	}
 
 }
