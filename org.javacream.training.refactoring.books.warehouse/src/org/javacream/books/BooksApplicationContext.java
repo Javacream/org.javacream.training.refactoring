@@ -1,6 +1,5 @@
 package org.javacream.books;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,8 +18,8 @@ import org.javacream.books.warehouse.impl.BookCreator;
 import org.javacream.books.warehouse.impl.MapBooksService;
 import org.javacream.books.warehouse.impl.decorators.DeepCopyBooksService;
 import org.javacream.util.aspects.Aspect;
-import org.javacream.util.aspects.PerformanceAspect;
-import org.javacream.util.aspects.TracingAspect;
+import org.javacream.util.aspects.Performance;
+import org.javacream.util.aspects.Tracer;
 
 public abstract class BooksApplicationContext {
 	public static final String ISBN = "ISBN-Test";
@@ -102,22 +101,17 @@ public abstract class BooksApplicationContext {
 		mapBooksService.setBooks(books);
 		mapBooksService.setBooksCreators(creators);
 		isbnGenerator.setPrefix(ISBN_GENERATOR_PREFIX);
+		Tracer tracer = new Tracer();
 		storeService = Aspect.aspect(simpleStoreService, 
-				(methodName, args) -> {
-					String arguments = args != null ? Arrays.asList(args).toString(): "none";
-					System.out.println("entering " + methodName +", params=" + arguments);
-				}, 
-				(methodName, result) -> {
-					System.out.println("returning from " + methodName +", result=" + result);
-				}, 
-				(methodName, t) -> {
-					System.out.println("throwing from " + methodName +", throwable=" + t);
-				}
+				tracer::before, 
+				tracer::returning, 
+				tracer::throwing
 				);
 		DeepCopyBooksService deepCopyBooksService = new DeepCopyBooksService();
-		BooksService auditBooksService = TracingAspect.aspect(mapBooksService);
+		BooksService auditBooksService = Aspect.aspect(mapBooksService, tracer::before, tracer::returning, tracer::throwing);
 		deepCopyBooksService.setDelegate(auditBooksService);
-		booksService = PerformanceAspect.aspect(deepCopyBooksService);
+		Performance performance = new Performance();
+		booksService = Aspect.aspect(deepCopyBooksService, performance::before, performance::returning, performance::throwing);
 	}
 
 }
