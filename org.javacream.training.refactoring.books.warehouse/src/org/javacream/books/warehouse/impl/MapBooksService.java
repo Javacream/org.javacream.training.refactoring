@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.store.api.StoreService;
 import org.javacream.books.warehouse.api.Book;
@@ -79,7 +79,6 @@ public class MapBooksService implements BooksService{
 
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<Book> findAllBooks() {
 		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
 	}
