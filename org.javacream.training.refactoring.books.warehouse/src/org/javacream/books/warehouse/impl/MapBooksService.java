@@ -1,11 +1,9 @@
 package org.javacream.books.warehouse.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.javacream.books.isbngenerator.api.IsbnGenerator;
 import org.javacream.books.store.api.StoreService;
 import org.javacream.books.warehouse.api.Book;
@@ -46,16 +44,11 @@ public class MapBooksService implements BooksService{
 		int stock = storeService.getStock(isbn);
 
 		result.setAvailable(stock > 0);
-		//Don't return internal Book if you don't use a database! 
-		result = (Book) SerializationUtils.clone(result);
 		return result;
 	}
 
 	@Override
 	public Book updateBook(Book bookDetailValue) throws BookException {
-		//Take a copy to prevent external manipulation!
-		bookDetailValue = (Book) SerializationUtils.clone(bookDetailValue);
-
 		if (bookDetailValue.getPrice() <= 0) {
 			throw new BookException(BookException.BookExceptionType.CONSTRAINT,
 					"price <= 0");
@@ -80,7 +73,7 @@ public class MapBooksService implements BooksService{
 
 	@Override
 	public Collection<Book> findAllBooks() {
-		return (Collection<Book>) SerializationUtils.clone(new ArrayList<Book>(books.values()));
+		return books.values();
 	}
 
 	public void setRandomIsbnGenerator(IsbnGenerator randomIsbnGenerator) {
